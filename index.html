@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COACPPU | Cooperativa de Ahorro y Crédito</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="top">
+            <div class="logo" aria-label="Logo COACPPU">
+                <svg viewBox="0 0 100 100" role="img" aria-label="Manos, persona y sol naciente">
+                    <path
+                        d="M50 8 59 22 76 18 73 36 91 44 77 56 82 74 63 72 50 91 37 72 18 74 23 56 9 44 27 36 24 18 41 22Z"
+                        fill="#0b8b87" />
+                    <circle cx="50" cy="37" r="10" fill="#efb943" />
+                    <path d="M32 63 Q50 45 68 63 L68 69 Q50 58 32 69Z" fill="#0b5575" />
+                    <path d="M18 68 Q33 55 49 72 Q65 55 82 68 Q67 89 50 82 Q32 89 18 68Z" fill="#0b5575" />
+                    <path d="M25 72 Q38 64 50 77 Q62 64 75 72" fill="none" stroke="#fff" stroke-width="3"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
+            <div class="brand">
+                <h1>COACPPU</h1>
+                <p>Cooperativa de Ahorro y Crédito · El Progreso, Yoro, Honduras</p><span class="tag">Ahorro ·
+                    Solidaridad · Desarrollo</span>
+            </div>
+        </div>
+        <nav class="no-print" id="nav">
+            <button class="navbtn active" data-page="inicio">Inicio</button>
+            <button class="navbtn" data-page="clientes">Clientes</button>
+            <button class="navbtn" data-page="socios">Socios</button>
+            <button class="navbtn" data-page="proveedores">Proveedores</button>
+            <button class="navbtn" data-page="acreedores">Acreedores</button>
+            <button class="navbtn" data-page="prestamos">Préstamos</button>
+            <button class="navbtn" data-page="pagos">Control de pagos</button>
+            <button class="navbtn" data-page="reportes">Listados y galerías</button>
+        </nav>
+    </header>
+    <main>
+        <section class="page active" id="inicio">
+            <div class="hero">
+                <div>
+                    <h2>Bienvenidos a COACPPU</h2>
+                    <p>Plataforma demostrativa para administrar clientes, socios, proveedores, acreedores y operaciones
+                        de préstamos. El emblema representa a las personas, el ahorro y el crecimiento comunitario.</p>
+                </div><button class="btn gold no-print" onclick="window.print()">Imprimir resumen</button>
+            </div>
+            <div class="cards">
+                <div class="stat"><small>Clientes registrados</small><strong id="sClientes">0</strong></div>
+                <div class="stat"><small>Socios registrados</small><strong id="sSocios">0</strong></div>
+                <div class="stat"><small>Proveedores</small><strong id="sProveedores">0</strong></div>
+                <div class="stat"><small>Acreedores</small><strong id="sAcreedores">0</strong></div>
+                <div class="stat"><small>Préstamos activos</small><strong id="sPrestamos">0</strong></div>
+                <div class="stat"><small>Saldo de cartera</small><strong id="sSaldo">L 0.00</strong></div>
+            </div>
+            <div class="panel">
+                <h3>Funciones del sistema</h3>
+                <div class="cards">
+                    <div class="metric"><strong>01 · Registros</strong><small>Crear, consultar, editar y eliminar
+                            datos.</small></div>
+                    <div class="metric"><strong>02 · Galerías</strong><small>Fotografías con nombre, vista y
+                            ocultar.</small></div>
+                    <div class="metric"><strong>03 · Préstamos</strong><small>Cuota nivelada con tasa y plazo
+                            definidos.</small></div>
+                    <div class="metric"><strong>04 · Pagos</strong><small>Abonos parciales o liquidación total.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="notice">Aviso: esta versión utiliza localStorage del navegador para demostración académica. No
+                sustituye un sistema financiero real: no tiene autenticación, cifrado, auditoría, copias de seguridad ni
+                base de datos central. No almacene información financiera real o sensible aquí.</div>
+        </section>
+
+        <div id="recordPages"></div>
+
+        <section class="page" id="prestamos">
+            <div class="panel">
+                <h2>Calculadora y registro de préstamos</h2>
+                <p class="muted">Sistema de cuota fija nivelada (método francés), con interés calculado sobre saldo
+                    pendiente.</p>
+                <div class="formgrid">
+                    <div class="field"><label>Socio / cliente</label><select id="loanPerson"></select></div>
+                    <div class="field"><label>Capital del préstamo (L)</label><input id="loanAmount" type="number"
+                            min="1" step=".01" value="10000"></div>
+                    <div class="field"><label>Tasa de interés anual (%)</label><input id="loanRate" type="number"
+                            min="0" step=".01" value="18"></div>
+                    <div class="field"><label>Plazo (meses)</label><input id="loanMonths" type="number" min="1"
+                            max="600" value="12"></div>
+                    <div class="field"><label>Fecha de desembolso</label><input id="loanDate" type="date"></div>
+                    <div class="field"><label>Referencia / descripción</label><input id="loanNote"
+                            placeholder="Ej. préstamo personal"></div>
+                </div>
+                <div class="actions no-print"><button class="btn secondary" onclick="calculateLoan()">Calcular
+                        cuota</button><button class="btn good" onclick="saveLoan()">Guardar préstamo</button><button
+                        class="btn secondary" onclick="window.print()">Imprimir</button></div>
+                <div class="calcresult" id="loanResult"></div>
+                <div id="amortWrap"></div>
+            </div>
+            <div class="panel">
+                <div class="toolbar">
+                    <h3>Préstamos registrados</h3><input id="loanSearch" placeholder="Buscar préstamo..."
+                        oninput="renderLoans()">
+                </div>
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ref.</th>
+                                <th>Socio / cliente</th>
+                                <th>Capital</th>
+                                <th>Cuota</th>
+                                <th>Saldo</th>
+                                <th>Estado</th>
+                                <th class="no-print">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loanRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="pagos">
+            <div class="panel">
+                <h2>Control de pagos de préstamos</h2>
+                <div class="formgrid">
+                    <div class="field"><label>Préstamo</label><select id="payLoan"></select></div>
+                    <div class="field"><label>Fecha de pago</label><input id="payDate" type="date"></div>
+                    <div class="field"><label>Monto recibido (L)</label><input id="payAmount" type="number" min=".01"
+                            step=".01" placeholder="0.00"></div>
+                    <div class="field"><label>Tipo de pago</label><select id="payType">
+                            <option value="parcial">Abono parcial</option>
+                            <option value="total">Liquidación total</option>
+                        </select></div>
+                    <div class="field"><label>Observación / recibo</label><input id="payNote"
+                            placeholder="Número de recibo"></div>
+                </div>
+                <div class="actions no-print"><button class="btn good" onclick="registerPayment()">Registrar
+                        pago</button><button class="btn secondary" onclick="window.print()">Imprimir comprobante /
+                        listado</button></div>
+                <div class="notice" style="margin-top:14px">Los pagos se aplican primero a los intereses acumulados
+                    estimados del período y luego al capital. Para simplificar la demostración, el saldo se reduce por
+                    el monto recibido; el cálculo contractual real debe ajustarse a las políticas, fechas, mora, seguros
+                    y normativa aplicable.</div>
+            </div>
+            <div class="panel">
+                <h3>Historial de pagos</h3>
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Préstamo</th>
+                                <th>Persona</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Saldo después</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="reportes">
+            <div class="panel">
+                <h2>Listados generales</h2>
+                <div class="actions no-print"><button class="btn secondary" onclick="printAll()">Imprimir todos los
+                        listados</button><button class="btn secondary" onclick="exportData()">Exportar respaldo
+                        JSON</button><label class="btn secondary" for="importFile">Importar respaldo</label><input
+                        id="importFile" class="hidden" type="file" accept=".json,application/json"
+                        onchange="importData(event)"></div>
+                <div id="allLists"></div>
+            </div>
+            <div class="panel">
+                <h2>Galería institucional</h2>
+                <p class="muted">Las fotografías agregadas en cada registro se muestran aquí. Use los botones Ver /
+                    Ocultar de cada módulo para controlar su galería.</p>
+                <div id="allGallery" class="gallery"></div>
+            </div>
+        </section>
+    </main>
+    <footer>COACPPU · Cooperativa de Ahorro y Crédito · El Progreso, Yoro, Honduras<br><br><b>Autores:</b> Lic.
+        Eleuterio Morán Alvarado · desarrollowebema@gmail.com · Cel. 3241-4565<br>Lic. Celis Donaldo Bonilla
+        Sorto<br><span class="muted">Prototipo académico en HTML5, CSS3, JavaScript y localStorage.</span></footer>
+
+    <script>
+        const KEY = 'coacppu_demo_v1';
+        const TYPES = {
+            clientes: { label: 'Clientes', fields: [['nombre', 'Nombre completo', 'text'], ['identidad', 'Identidad / RTN', 'text'], ['telefono', 'Teléfono', 'tel'], ['correo', 'Correo electrónico', 'email'], ['direccion', 'Dirección', 'text']] },
+            socios: { label: 'Socios', fields: [['nombre', 'Nombre completo', 'text'], ['identidad', 'Identidad', 'text'], ['telefono', 'Teléfono', 'tel'], ['correo', 'Correo electrónico', 'email'], ['aporte', 'Aportación inicial (L)', 'number'], ['direccion', 'Dirección', 'text']] },
+            proveedores: { label: 'Proveedores', fields: [['nombre', 'Nombre / empresa', 'text'], ['rtn', 'RTN', 'text'], ['telefono', 'Teléfono', 'tel'], ['correo', 'Correo electrónico', 'email'], ['producto', 'Producto / servicio', 'text'], ['direccion', 'Dirección', 'text']] },
+            acreedores: { label: 'Acreedores', fields: [['nombre', 'Nombre / entidad', 'text'], ['identidad', 'Identidad / RTN', 'text'], ['telefono', 'Teléfono', 'tel'], ['correo', 'Correo electrónico', 'email'], ['monto', 'Monto adeudado (L)', 'number'], ['direccion', 'Dirección', 'text']] }
+        };
+        let db = loadDB(), currentCalc = null;
+        function loadDB() { try { return JSON.parse(localStorage.getItem(KEY)) || { clientes: [], socios: [], proveedores: [], acreedores: [], loans: [], payments: [] } } catch (e) { return { clientes: [], socios: [], proveedores: [], acreedores: [], loans: [], payments: [] } } }
+        function persist() { try { localStorage.setItem(KEY, JSON.stringify(db)); refreshAll(); return true } catch (e) { alert('No se pudo guardar. La galería puede superar la capacidad de localStorage. Reduzca el tamaño de las imágenes.'); return false } }
+        function money(n) { return 'L ' + Number(n || 0).toLocaleString('es-HN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
+        function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])) }
+        function today() { return new Date().toISOString().slice(0, 10) }
+        document.getElementById('loanDate').value = today(); document.getElementById('payDate').value = today();
+        document.querySelectorAll('.navbtn').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
+        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === id)); document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('active', b.dataset.page === id)); if (id === 'pagos') refreshLoanSelects(); if (id === 'reportes') renderReports(); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+
+        function buildRecordPages() {
+            const root = document.getElementById('recordPages');
+            Object.entries(TYPES).forEach(([type, cfg]) => {
+                const sec = document.createElement('section'); sec.className = 'page'; sec.id = type;
+                sec.innerHTML = `<div class="panel"><h2>Registro de ${cfg.label.toLowerCase()}</h2><form id="form-${type}" onsubmit="saveRecord(event,'${type}')"><input type="hidden" id="${type}-id"><div class="formgrid">${cfg.fields.map(([key, label, input]) => `<div class="field"><label>${label}</label><input id="${type}-${key}" type="${input}" ${input === 'number' ? 'step="0.01" min="0"' : ''} ${key === 'nombre' ? 'required' : ''}></div>`).join('')}<div class="field"><label>Fotografía / imagen</label><input id="${type}-photo" type="file" accept="image/*"></div></div><div class="actions no-print"><button class="btn good" type="submit">Guardar registro</button><button class="btn secondary" type="button" onclick="resetRecord('${type}')">Limpiar</button><button class="btn secondary" type="button" onclick="toggleGallery('${type}')">Ver / Ocultar galería</button><button class="btn secondary" type="button" onclick="window.print()">Imprimir listado</button></div></form></div><div class="panel"><div class="toolbar"><h3>Listado de ${cfg.label.toLowerCase()}</h3><input id="${type}-search" placeholder="Buscar..." oninput="renderRecords('${type}')"></div><div class="tablewrap"><table><thead><tr><th>Foto</th>${cfg.fields.map(f => `<th>${f[1]}</th>`).join('')}<th class="no-print">Acciones</th></tr></thead><tbody id="${type}-rows"></tbody></table></div></div><div class="panel" id="${type}-gallery-panel"><h3>Galería de ${cfg.label.toLowerCase()}</h3><div class="gallery" id="${type}-gallery"></div></div>`;
+                root.appendChild(sec);
+            });
+        }
+        buildRecordPages();
+        function saveRecord(ev, type) {
+            ev.preventDefault(); const id = document.getElementById(type + '-id').value; const obj = { id: id || String(Date.now()), created: new Date().toISOString() };
+            TYPES[type].fields.forEach(([k]) => obj[k] = document.getElementById(type + '-' + k).value.trim());
+            const file = document.getElementById(type + '-photo').files[0];
+            const finish = photo => {
+                if (photo) obj.photo = photo; else if (id) { const old = db[type].find(x => x.id === id); if (old) obj.photo = old.photo || '' }
+                if (id) { const i = db[type].findIndex(x => x.id === id); if (i >= 0) db[type][i] = obj } else db[type].push(obj);
+                if (persist()) { resetRecord(type); alert('Registro guardado correctamente.') }
+            };
+            if (file) { if (file.size > 700000) { alert('Imagen mayor de 700 KB. Seleccione una imagen más pequeña para no llenar localStorage.'); return } const r = new FileReader(); r.onload = () => finish(r.result); r.readAsDataURL(file) } else finish('');
+        }
+        function resetRecord(type) { document.getElementById('form-' + type).reset(); document.getElementById(type + '-id').value = '' }
+        function renderRecords(type) {
+            const q = (document.getElementById(type + '-search')?.value || '').toLowerCase(), rows = db[type].filter(x => Object.values(x).some(v => String(v).toLowerCase().includes(q)));
+            document.getElementById(type + '-rows').innerHTML = rows.map(x => `<tr><td>${x.photo ? `<img class="thumb" src="${x.photo}">` : '—'}</td>${TYPES[type].fields.map(([k]) => `<td>${esc(x[k] || '')}</td>`).join('')}<td class="no-print"><button class="btn secondary" onclick="editRecord('${type}','${x.id}')">Editar</button> <button class="btn danger" onclick="deleteRecord('${type}','${x.id}')">Eliminar</button></td></tr>`).join('') || `<tr><td colspan="${TYPES[type].fields.length + 2}" class="empty">No hay registros.</td></tr>`;
+            renderGallery(type);
+        }
+        function editRecord(type, id) { const x = db[type].find(a => a.id === id); if (!x) return; TYPES[type].fields.forEach(([k]) => document.getElementById(type + '-' + k).value = x[k] || ''); document.getElementById(type + '-id').value = id; showPage(type); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+        function deleteRecord(type, id) { if (confirm('¿Eliminar este registro?')) { db[type] = db[type].filter(x => x.id !== id); persist() } }
+        function toggleGallery(type) { document.getElementById(type + '-gallery-panel').classList.toggle('hidden') }
+        function renderGallery(type) { document.getElementById(type + '-gallery').innerHTML = db[type].map(x => `<div class="tile">${x.photo ? `<img src="${x.photo}" alt="">` : '<div class="thumb" style="width:100%;height:125px"></div>'}<b>${esc(x.nombre)}</b><small>${esc(x.telefono || x.identidad || x.rtn || '')}</small></div>`).join('') || '<div class="empty">Galería vacía.</div>' }
+
+        function calculateLoan() {
+            const P = Number(loanAmount.value), annual = Number(loanRate.value), n = Number(loanMonths.value);
+            if (!(P > 0 && annual >= 0 && n > 0)) { alert('Ingrese capital, tasa y plazo válidos.'); return }
+            const r = annual / 1200, cuota = r === 0 ? P / n : P * r / (1 - Math.pow(1 + r, -n));
+            let balance = P, totalInt = 0, rows = [];
+            for (let i = 1; i <= n; i++) { let interest = balance * r, capital = cuota - interest; if (i === n) capital = balance; let pay = capital + interest; balance = Math.max(0, balance - capital); totalInt += interest; rows.push({ i, pay, interest, capital, balance }) }
+            currentCalc = { P, annual, n, cuota, totalInt, rows };
+            loanResult.innerHTML = `<div class="metric"><small>Cuota mensual nivelada</small><strong>${money(cuota)}</strong></div><div class="metric"><small>Total estimado a pagar</small><strong>${money(cuota * n)}</strong></div><div class="metric"><small>Intereses estimados</small><strong>${money(totalInt)}</strong></div><div class="metric"><small>Capital</small><strong>${money(P)}</strong></div>`;
+            amortWrap.innerHTML = `<h3>Tabla de amortización estimada</h3><div class="tablewrap"><table><thead><tr><th>Cuota</th><th>Pago</th><th>Interés</th><th>Capital</th><th>Saldo</th></tr></thead><tbody>${rows.map(x => `<tr><td>${x.i}</td><td>${money(x.pay)}</td><td>${money(x.interest)}</td><td>${money(x.capital)}</td><td>${money(x.balance)}</td></tr>`).join('')}</tbody></table></div>`;
+        }
+        function saveLoan() {
+            if (!currentCalc) { calculateLoan(); if (!currentCalc) return }
+            const personId = loanPerson.value; if (!personId) { alert('Registre o seleccione un socio/cliente primero.'); return }
+            const person = [...db.socios, ...db.clientes].find(x => x.id === personId); if (!person) { alert('Seleccione una persona válida.'); return }
+            const c = currentCalc, loan = { id: 'PRE-' + Date.now(), personId, person: person.nombre, capital: c.P, rate: c.annual, months: c.n, installment: c.cuota, balance: c.P, paid: 0, date: loanDate.value, note: loanNote.value, status: 'Activo', schedule: c.rows };
+            db.loans.push(loan); if (persist()) { alert('Préstamo guardado.'); currentCalc = null; loanResult.innerHTML = ''; amortWrap.innerHTML = ''; renderLoans() }
+        }
+        function renderLoans() {
+            const q = (loanSearch.value || '').toLowerCase(); loanRows.innerHTML = db.loans.filter(x => (x.id + x.person + x.status).toLowerCase().includes(q)).map(x => `<tr><td>${x.id}</td><td>${esc(x.person)}</td><td>${money(x.capital)}</td><td>${money(x.installment)}</td><td>${money(x.balance)}</td><td>${x.status}</td><td class="no-print"><button class="btn secondary" onclick="selectLoanForPayment('${x.id}')">Registrar pago</button></td></tr>`).join('') || '<tr><td colspan="7" class="empty">No hay préstamos registrados.</td></tr>';
+        }
+        function refreshLoanSelects() {
+            const people = [...db.socios, ...db.clientes]; loanPerson.innerHTML = '<option value="">Seleccione socio / cliente</option>' + people.map(x => `<option value="${x.id}">${esc(x.nombre)} (${db.socios.some(s => s.id === x.id) ? 'Socio' : 'Cliente'})</option>`).join('');
+            const active = db.loans.filter(x => x.status === 'Activo'); payLoan.innerHTML = '<option value="">Seleccione préstamo activo</option>' + active.map(x => `<option value="${x.id}">${x.id} · ${esc(x.person)} · saldo ${money(x.balance)}</option>`).join('');
+        }
+        function selectLoanForPayment(id) { showPage('pagos'); refreshLoanSelects(); payLoan.value = id }
+        function registerPayment() {
+            const id = payLoan.value, loan = db.loans.find(x => x.id === id), amount = Number(payAmount.value);
+            if (!loan || loan.status !== 'Activo') { alert('Seleccione un préstamo activo.'); return }
+            if (!(amount > 0)) { alert('Ingrese un monto válido.'); return }
+            let received = amount; if (payType.value === 'total') received = loan.balance;
+            if (received > loan.balance) { if (!confirm('El monto supera el saldo. ¿Registrar solamente el saldo pendiente?')) return; received = loan.balance }
+            loan.balance = Math.max(0, loan.balance - received); loan.paid = (loan.paid || 0) + received; if (loan.balance < 0.01) { loan.balance = 0; loan.status = 'Cancelado' }
+            db.payments.push({ id: 'PAG-' + Date.now(), loanId: id, person: loan.person, date: payDate.value, amount: received, type: loan.balance === 0 ? 'Liquidación total' : 'Abono parcial', balance: loan.balance, note: payNote.value });
+            if (persist()) { payAmount.value = ''; payNote.value = ''; alert('Pago registrado. Saldo pendiente: ' + money(loan.balance)) }
+        }
+        function renderPayments() { paymentRows.innerHTML = db.payments.slice().reverse().map(p => `<tr><td>${esc(p.date)}</td><td>${p.loanId}</td><td>${esc(p.person)}</td><td>${p.type}</td><td>${money(p.amount)}</td><td>${money(p.balance)}</td></tr>`).join('') || '<tr><td colspan="6" class="empty">No hay pagos registrados.</td></tr>' }
+        function renderReports() {
+            allLists.innerHTML = Object.entries(TYPES).map(([t, c]) => `<h3>${c.label}</h3><div class="tablewrap"><table><thead><tr>${c.fields.map(f => `<th>${f[1]}</th>`).join('')}</tr></thead><tbody>${db[t].map(x => `<tr>${c.fields.map(f => `<td>${esc(x[f[0]])}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${c.fields.length}" class="empty">Sin registros</td></tr>`}</tbody></table></div>`).join('');
+            allGallery.innerHTML = Object.entries(TYPES).flatMap(([t, c]) => db[t].map(x => `<div class="tile">${x.photo ? `<img src="${x.photo}">` : '<div style="height:125px;background:#edf3f6;border-radius:10px"></div>'}<b>${esc(x.nombre)}</b><small>${c.label}</small></div>`)).join('') || '<div class="empty">No hay fotografías registradas.</div>';
+        }
+        function printAll() { showPage('reportes'); setTimeout(() => window.print(), 150) }
+        function exportData() { const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' }), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'respaldo_coacppu.json'; a.click(); URL.revokeObjectURL(a.href) }
+        function importData(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const d = JSON.parse(r.result); if (!confirm('Importar reemplazará los datos actuales. ¿Continuar?')) return; db = { ...db, ...d }; persist(); alert('Respaldo importado.') } catch (err) { alert('Archivo JSON no válido.') } }; r.readAsText(f) }
+        function refreshAll() {
+            Object.keys(TYPES).forEach(t => renderRecords(t)); refreshLoanSelects(); renderLoans(); renderPayments();
+            sClientes.textContent = db.clientes.length; sSocios.textContent = db.socios.length; sProveedores.textContent = db.proveedores.length; sAcreedores.textContent = db.acreedores.length;
+            const active = db.loans.filter(x => x.status === 'Activo'); sPrestamos.textContent = active.length; sSaldo.textContent = money(active.reduce((a, x) => a + x.balance, 0));
+            if (document.getElementById('reportes').classList.contains('active')) renderReports();
+        }
+        refreshAll();
+    </script>
+</body>
+
+</html>
